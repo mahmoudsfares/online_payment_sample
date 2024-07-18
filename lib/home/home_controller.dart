@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:online_payment_sample/constants.dart';
 
-class MyController {
+class HomeController {
 
   final ValueNotifier<bool> _isLoading = ValueNotifier(false);
   ValueNotifier<bool> get isLoading => _isLoading;
