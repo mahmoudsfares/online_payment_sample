@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # TODO 2: import dependencies
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:

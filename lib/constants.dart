@@ -1,0 +1,4 @@
+class Constants {
+  // TODO 1: get this from paymob account -> settings
+  static const String API_KEY = "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T1RnMU5qWTFMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuRGpNeGo4emF4TF9pTG94TVV6OGJHRUdOSUgteGxMVThmRm1FWl9TeEs5SXhBaEN1c2tEMHJha3NHa3gwMVVMSm11TlU3RmZQWm54YmZqOVFyTkRpdlE=";
+}
