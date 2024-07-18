@@ -1,18 +1,29 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:online_payment_sample/constants.dart';
 
-class MyRepo {
+class MyController {
 
+  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
+  ValueNotifier<bool> get isLoading => _isLoading;
+
+  final ValueNotifier<String> _errorMessage = ValueNotifier('');
+  ValueNotifier<String> get errorMessage => _errorMessage;
+
+  // TODO 4: create a high-level method that will call all the methods created in step 3 in order
   Future<String> payWithPaymob(int amount) async {
     try {
+      _isLoading.value = true;
       String token = await _getToken();
       int orderId = await _getOrderId(token: token, amount: (100 * amount).toString());
       String paymentKey = await _getPaymentKey(token: token, orderId: orderId.toString(), amount: (100 * amount).toString());
+      _isLoading.value = false;
       return paymentKey;
-    } catch(e) {
-      print('Error occurred');
-      rethrow;
+    } catch (e) {
+      _isLoading.value = false;
+      _errorMessage.value = 'FAILED: ${e.toString().substring(11)}';
+      return 'FAILED: ${e.toString().substring(11)}';
     }
   }
 
@@ -24,7 +35,7 @@ class MyRepo {
     if (response.statusCode == 201) {
       return jsonDecode(response.body)['token'];
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to get token');
     }
   }
 
@@ -41,7 +52,7 @@ class MyRepo {
     if (response.statusCode == 201) {
       return jsonDecode(response.body)['id'];
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to get order id');
     }
   }
 
@@ -75,7 +86,7 @@ class MyRepo {
     if (response.statusCode == 201) {
       return jsonDecode(response.body)['token'];
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to get payment key');
     }
   }
 }
