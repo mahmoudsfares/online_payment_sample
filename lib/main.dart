@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => HomePage(),
-        '/payment': (context) => PaymentPage(),
+        '/payment': (context) => const PaymentPage(),
       },
     );
   }
