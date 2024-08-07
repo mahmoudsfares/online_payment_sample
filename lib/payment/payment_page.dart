@@ -23,13 +23,13 @@ class _PaymentPageState extends State<PaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        // TODO 5: open the iframe in a web view with the payment key you obtained from step 3
+        // check out all the available iframes from developers -> iframes
         child: InAppWebView(
           key: webViewKey,
           initialUrlRequest: URLRequest(url: WebUri('https://accept.paymob.com/api/acceptance/iframes/856536?payment_token=$paymentKey')),
           initialSettings: InAppWebViewSettings(transparentBackground: true, safeBrowsingEnabled: true, isFraudulentWebsiteWarningEnabled: true),
-          onWebViewCreated: (controller) async {
-            webViewController = controller;
-          },
+          onWebViewCreated: (controller) => webViewController = controller,
         ),
       ),
     );

@@ -5,14 +5,15 @@ import 'package:online_payment_sample/constants.dart';
 
 class HomeController {
 
-  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
-  ValueNotifier<bool> get isLoading => _isLoading;
+  final ValueNotifier<bool> isLoading = ValueNotifier(false);
 
-  final ValueNotifier<String> _errorMessage = ValueNotifier('');
-  ValueNotifier<String> get errorMessage => _errorMessage;
-
-  // TODO 3: prepare the methods that will be called to invoke the api flow
-  Future<String> _getToken(String amount) async {
+  // TODO 3: prepare the api call for getting the payment key
+  // url: https://accept.paymob.com/v1/intention/
+  // get the payment methods ids from developers -> payment integrations
+  // all the NA data in billing data are not required
+  // for the expected 201 response, head to response section:
+  // https://developers.paymob.com/egypt/checkout-api/integration-guide-and-api-reference/create-intention-payment-api
+  Future<String> _getPaymentKey(String amount) async {
     Uri uri = Uri.https("accept.paymob.com", "/v1/intention/");
     String body = jsonEncode({
       "amount": amount,
@@ -40,23 +41,23 @@ class HomeController {
       Map<String, dynamic> body = jsonDecode(response.body) as Map<String, dynamic>;
       List<dynamic> paymentKeys = body["payment_keys"] as List<dynamic>;
       Map<String, dynamic> integration = paymentKeys[0] as Map<String, dynamic>;
-      String token = integration["key"];
-      return token;
+      String paymentKey = integration["key"];
+      return paymentKey;
     } else {
       throw Exception('Failed to get token');
     }
   }
 
   // TODO 4: create a high-level method that will call all the methods created in step 3 in order
+  // provided amount is in cents so it must be multiplied by 100
   Future<String> payWithPaymob(int amount) async {
     try {
-      _isLoading.value = true;
-      String token = await _getToken((100 * amount).toString());
-      _isLoading.value = false;
+      isLoading.value = true;
+      String token = await _getPaymentKey((100 * amount).toString());
+      isLoading.value = false;
       return token;
     } catch (e) {
-      _isLoading.value = false;
-      _errorMessage.value = 'FAILED: ${e.toString().substring(11)}';
+      isLoading.value = false;
       return 'FAILED: ${e.toString().substring(11)}';
     }
   }

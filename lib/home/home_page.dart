@@ -14,31 +14,29 @@ class HomePage extends StatelessWidget {
         title: const Text('Online payment'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ValueListenableBuilder<String>(
-              valueListenable: _controller.errorMessage,
-              builder: (context, error, child) => Text(
-                error,
-                style: const TextStyle(color: Colors.red),
-              ),
-            ),
-            ValueListenableBuilder<bool>(
-              valueListenable: _controller.isLoading,
-              builder: (context, isLoading, child) => isLoading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: () async {
-                        String paymentTokenResponse = await _controller.payWithPaymob(100);
-                        if (!paymentTokenResponse.startsWith('FAILED')) {
-                          Future.delayed(Duration.zero, () => Navigator.pushNamed(context, '/payment', arguments: paymentTokenResponse));
-                        }
-                      },
-                      child: const Text('Pay now'),
-                    ),
-            ),
-          ],
+        child: ValueListenableBuilder<bool>(
+          valueListenable: _controller.isLoading,
+          builder: (context, isLoading, child) => isLoading
+              ? const CircularProgressIndicator()
+              : ElevatedButton(
+                  onPressed: () async {
+                    String paymentTokenResponse = await _controller.payWithPaymob(100);
+                    if (!paymentTokenResponse.startsWith('FAILED')) {
+                      Future.delayed(Duration.zero, () => Navigator.pushNamed(context, '/payment', arguments: paymentTokenResponse));
+                    } else {
+                      Future.delayed(
+                        Duration.zero,
+                        () => ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(paymentTokenResponse),
+                            duration: const Duration(seconds: 3),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Pay now'),
+                ),
         ),
       ),
     );
